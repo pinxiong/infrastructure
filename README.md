@@ -1,19 +1,15 @@
 ## Infrastructure
 
----
-
 The purpose of this project is to help you build your infrastructure in your [aws account](https://aws.amazon.com/).
 
 ## Prerequisites
 
----
 + Create an [aws account](https://aws.amazon.com/) with the IAM `AdministratorAccess` permission
 + Install and configure [aws CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)
 + Install and configure [terraform](https://www.terraform.io/downloads)
 
 ## How to work
 
----
 There are two steps to help you create your infrastructure as follows:
 
 ### Setup environment
