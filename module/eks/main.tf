@@ -60,7 +60,9 @@ resource "aws_security_group" "security_group" {
   ingress {
     from_port       = "0"
     to_port         = "0"
-    protocol        = "TCP"
+    protocol        = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
     security_groups = local.security_group_ids
   }
 
@@ -163,6 +165,8 @@ resource "aws_eks_node_group" "node_group" {
   node_role_arn   = aws_iam_role.node_group_role.arn
 
   subnet_ids = local.private_subnets_id
+
+  instance_types = ["t2.micro","t3.micro"]
 
   scaling_config {
     desired_size = local.desired_size
