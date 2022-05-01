@@ -70,3 +70,55 @@ $ terraform apply
 ```
 
 You will be prompted to enter `yes` after confirmed the listed resources.
+
+## How to verify
+
+Now, all the resources have been built, The next step is to how to verify them.
+
+We can use `Jump Server` to test if they work well. We just need to verify EKS because it depends on VPC and subnets.
+
++ Login Jump Server
+
+We can use `Session Manager` to login `Jump Server`, and then setups the environment
+```shell
+$ sudo -s
+```
++ Configure Access Key and Secret Access Key
+
+**NOTE**: You **MUST** use the Access Key and Secret Access Key of user that created EKS
+
+```shell
+$ aws configure
+AWS Access Key ID [*******************]: 
+AWS Secret Access Key [*********************]: 
+Default region name [us-east-1]: 
+Default output format [json]
+```
+
+You can check it
+
+```shell
+$ aws sts get-caller-identity
+{
+    "Account": "***********",
+    "UserId": "**********************",
+    "Arn": "arn:aws:iam::***********:user/****"
+}
+```
+
++ Update or create kubeconfig
+
+```shell
+$ aws eks --region region-code update-kubeconfig --name cluster_name
+```
+`region-code` is aws region code, such as `us-east-1`
+
+`cluster-name` is the name of the created EKS
+
++ Access EKS cluster
+
+```shell
+$ kubectl get svc
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   172.20.0.1   <none>        443/TCP   2d2h
+```
