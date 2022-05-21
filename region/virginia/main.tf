@@ -28,7 +28,7 @@ module "JumpServer" {
   shared_tags       = local.tags
 }
 
-module "EKS" {
+/*module "EKS" {
   source             = "../../module/eks"
   name               = "EKS"
   vpc_id             = module.Networking.vpc_id
@@ -37,6 +37,12 @@ module "EKS" {
   desired_size       = 1
   max_size           = 16
   eks_tags           = local.tags
-}
+}*/
 
-
+/*module "ECS" {
+  source         = "../../module/ecs"
+  vpc_id         = module.Networking.vpc_id
+  ecs_name       = " Message Transmission "
+  log_group_name = "/aws/mq/message-transmission"
+  vpc_subnets_id = ["subnet-02c08f984a1cc349f", "subnet-0a4351da270f767fe", "subnet-041bc2a26869a5a65"]
+}*/
