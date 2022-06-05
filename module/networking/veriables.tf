@@ -1,8 +1,10 @@
 variable "name" {
+  type        = string
   description = "The VPC name"
 }
 
 variable "vpc_cidr_block" {
+  type        = string
   description = "CIDR block of the vpc"
 }
 
