@@ -28,7 +28,9 @@ terraform {
   }
 
   backend "s3" {
-    bucket  = "default-terraform-state-us-east-1"
+    //NOTE: make sure the bucket exists
+    // You can create bucket using setup module first
+    bucket  = "pin-terraform-state-us-east-1"
     key     = "terraform/backend.tfstate"
     region  = "us-east-1"
     encrypt = "true"
