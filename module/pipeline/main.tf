@@ -53,7 +53,7 @@ resource "aws_ecr_repository" "ecr" {
   }, local.pipeline_tags)
 }
 
-resource "aws_ecr_repository_policy" "message-transmission" {
+resource "aws_ecr_repository_policy" "ecr-policy" {
   repository = aws_ecr_repository.ecr.name
   policy     = jsonencode({
     "Version" : "2008-10-17",
@@ -189,8 +189,6 @@ resource "aws_codebuild_project" "build" {
     privileged_mode             = true
   }
   source {
-    /*type     = "CODECOMMIT"
-    location = aws_codecommit_repository.repository.arn*/
     git_clone_depth     = 0
     insecure_ssl        = false
     report_build_status = false
@@ -226,7 +224,7 @@ resource "aws_codepipeline" "codepipeline" {
       provider         = "CodeCommit"
       run_order        = 1
       version          = "1"
-      output_artifacts = ["source_output"]
+      output_artifacts = ["source_op"]
       configuration    = {
         RepositoryName       = aws_codecommit_repository.repository.repository_name
         BranchName           = aws_codecommit_repository.repository.default_branch
@@ -242,8 +240,8 @@ resource "aws_codepipeline" "codepipeline" {
       category         = "Build"
       owner            = "AWS"
       provider         = "CodeBuild"
-      input_artifacts  = ["source_output"]
-      output_artifacts = ["build_output"]
+      input_artifacts  = ["source_op"]
+      output_artifacts = ["build_op"]
       version          = "1"
       run_order        = 1
 
@@ -290,7 +288,7 @@ resource "aws_codepipeline" "codepipeline" {
       category        = "Deploy"
       owner           = "AWS"
       provider        = "ECS"
-      input_artifacts = ["build_output"]
+      input_artifacts = ["build_op"]
       run_order       = 1
       version         = "1"
 
