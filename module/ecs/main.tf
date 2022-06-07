@@ -216,8 +216,8 @@ resource "aws_ecs_service" "ecs" {
   launch_type                        = "FARGATE"
   scheduling_strategy                = "REPLICA"
   force_new_deployment               = true
-  deployment_maximum_percent         = 100
-  deployment_minimum_healthy_percent = 0
+  deployment_maximum_percent         = 200
+  deployment_minimum_healthy_percent = 100
   desired_count                      = 1
   network_configuration {
     subnets          = flatten(local.vpc_private_subnets_id)
