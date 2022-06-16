@@ -23,20 +23,30 @@ resource "aws_iam_role" "eks_role" {
 }
 
 # Attach the CloudWatchFullAccess policy to EKS role
-resource "aws_iam_role_policy_attachment" "eks_CloudWatchFullAccess" {
+resource "aws_iam_role_policy_attachment" "eks__CloudWatchFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccess"
   role       = aws_iam_role.eks_role.name
 }
 
-resource "aws_iam_role_policy_attachment" "eks_AmazonEKSClusterPolicy" {
+resource "aws_iam_role_policy_attachment" "eks__AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   role       = aws_iam_role.eks_role.name
 }
 
 # Optionally, enable Security Groups for Pods
-resource "aws_iam_role_policy_attachment" "eks_AmazonEKSVPCResourceController" {
+resource "aws_iam_role_policy_attachment" "eks__AmazonEKSVPCResourceController" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
   role       = aws_iam_role.eks_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "eks__AmazonEC2ContainerRegistryReadOnly" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+  role       = aws_iam_role.eks_role.id
+}
+
+resource "aws_iam_role_policy_attachment" "eks__AmazonEKSWorkerNodePolicy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+  role       = aws_iam_role.eks_role.id
 }
 
 # Default Security Group of EKS
@@ -46,12 +56,12 @@ resource "aws_security_group" "security_group" {
   vpc_id      = local.vpc_id
 
   ingress {
-    from_port       = "0"
-    to_port         = "0"
-    protocol        = "-1"
+    from_port        = "0"
+    to_port          = "0"
+    protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
-    security_groups = local.security_group_ids
+    security_groups  = local.security_group_ids
   }
 
   tags = merge({
@@ -63,7 +73,7 @@ resource "aws_security_group" "security_group" {
 # EKS Cluster
 resource "aws_eks_cluster" "eks" {
   name    = local.name
-  version = "1.22"
+  version = local.eks_version
 
   enabled_cluster_log_types = [
     "api",
@@ -94,9 +104,8 @@ resource "aws_eks_cluster" "eks" {
 }
 
 ######################### Node Group ############################
-
 resource "aws_iam_role" "node_group_role" {
-  name                  = format("%s-node-group-role", lower(aws_eks_cluster.eks.name))
+  name                  = lower(format("%s-node-group-role", lower(aws_eks_cluster.eks.name)))
   path                  = "/"
   force_detach_policies = false
   max_session_duration  = 3600
@@ -116,36 +125,52 @@ resource "aws_iam_role" "node_group_role" {
   )
 }
 
-resource "aws_iam_role_policy_attachment" "node_group_AmazonEC2ContainerRegistryReadOnly" {
+resource "aws_iam_role_policy_attachment" "node_group__AmazonEC2ContainerRegistryReadOnly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = aws_iam_role.node_group_role.id
 }
 
-resource "aws_iam_role_policy_attachment" "node_group_AmazonEKSWorkerNodePolicy" {
+resource "aws_iam_role_policy_attachment" "node_group__AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = aws_iam_role.node_group_role.id
 }
 
-resource "aws_iam_role_policy_attachment" "node_group_AmazonEC2RoleforSSM" {
+resource "aws_iam_role_policy_attachment" "node_group__AmazonEC2RoleforSSM" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
   role       = aws_iam_role.node_group_role.id
 }
 
-resource "aws_iam_role_policy_attachment" "node_group_AmazonEKS_CNI_Policy" {
+resource "aws_iam_role_policy_attachment" "node_group__AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   role       = aws_iam_role.node_group_role.id
 }
 
-resource "aws_iam_role_policy_attachment" "node_group_CloudWatchAgentServerPolicy" {
+resource "aws_iam_role_policy_attachment" "node_group__CloudWatchAgentServerPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
   role       = aws_iam_role.node_group_role.id
 }
 
+resource "aws_iam_role_policy_attachment" "node_group__AmazonEC2FullAccess" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+  role       = aws_iam_role.node_group_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "node_group__CloudWatchFullAccess" {
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccess"
+  role       = aws_iam_role.node_group_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "node_group__AmazonSSMFullAccess" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
+  role       = aws_iam_role.node_group_role.name
+}
+
 resource "aws_eks_node_group" "node_group" {
-  cluster_name  = aws_eks_cluster.eks.name
-  disk_size     = 0
-  capacity_type = "SPOT"
-  labels        = {
+  cluster_name         = aws_eks_cluster.eks.name
+  force_update_version = true
+  disk_size = 10
+  capacity_type        = "ON_DEMAND"
+  labels               = {
     "eks/cluster-name"   = aws_eks_cluster.eks.name
     "eks/nodegroup-name" = format("nodegroup_%s", lower(aws_eks_cluster.eks.name))
   }
@@ -154,7 +179,8 @@ resource "aws_eks_node_group" "node_group" {
 
   subnet_ids = local.private_subnets_id
 
-  instance_types = ["t2.micro","t3.micro"]
+  #instance_types = ["t2.micro", "t3.small"]
+  instance_types = ["t3a.xlarge"]
 
   scaling_config {
     desired_size = local.desired_size
@@ -165,7 +191,7 @@ resource "aws_eks_node_group" "node_group" {
   timeouts {
     create = "10m"
     update = "10m"
-    delete = "30m"
+    delete = "15m"
   }
 
   lifecycle {

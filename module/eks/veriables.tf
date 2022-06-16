@@ -18,6 +18,12 @@ variable "private_subnets_id" {
   type        = list
 }
 
+variable "eks_version" {
+  description = "The EKS's version"
+  type        = string
+  default     = "1.22"
+}
+
 variable "desired_size" {
   description = "The desired size of node"
   type        = number

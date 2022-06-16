@@ -3,6 +3,7 @@ locals {
   vpc_id             = var.vpc_id
   public_subnets_id  = var.public_subnets_id
   private_subnets_id = distinct(flatten(var.private_subnets_id))
+  eks_version        = var.eks_version
   desired_size       = var.desired_size
   max_size           = var.max_size
   min_size           = var.min_size
