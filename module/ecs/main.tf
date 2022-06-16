@@ -283,7 +283,7 @@ resource "aws_cloudwatch_metric_alarm" "ecs_service_scale_out_alarm" {
   evaluation_periods  = "1"
   metric_name         = "CPUUtilization"
   namespace           = "AWS/ECS"
-  period              = "60"
+  period              = "10"
   statistic           = "Average"
   threshold           = "80"
 
@@ -302,7 +302,7 @@ resource "aws_cloudwatch_metric_alarm" "ecs_service_scale_in_alarm" {
   evaluation_periods  = "1"
   metric_name         = "CPUUtilization"
   namespace           = "AWS/ECS"
-  period              = "60"
+  period              = "30"
   statistic           = "Average"
   threshold           = "20"
 
