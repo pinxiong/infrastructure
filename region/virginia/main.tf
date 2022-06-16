@@ -12,6 +12,7 @@ module "Networking" {
   vpc_tags                   = local.tags
 }
 
+/*
 # Create ECS for demo
 module "ECS" {
   source                 = "../../module/ecs"
@@ -39,4 +40,19 @@ module "Pipeline" {
   pipeline_tags    = local.tags
   ecs_cluster_name = module.ECS.ecs_cluster_name
   ecs_service_name = module.ECS.ecs_service_name
+}*/
+
+module "Jumper" {
+  source            = "../../module/jumpserver"
+  public_subnets_id = module.Networking.public_subnets_id
+  vpc_id            = module.Networking.vpc_id
+}
+
+module "EKS" {
+  source             = "../../module/eks"
+  max_size           = 4
+  name               = "Study"
+  private_subnets_id = module.Networking.private_subnets_id
+  public_subnets_id  = module.Networking.public_subnets_id
+  vpc_id             = module.Networking.vpc_id
 }
