@@ -28,7 +28,7 @@ resource "aws_security_group" "elb" {
   }, local.tags)
 }
 
-resource "aws_security_group" "ecs-service" {
+resource "aws_security_group" "ecs_service" {
   name        = local.ecs_service_name
   description = "Allow ${local.project_name}-elb to visit"
   vpc_id      = local.vpc_id
@@ -58,7 +58,7 @@ resource "aws_security_group" "ecs-service" {
 ############################################################################################
 ##=============================Define elb related resources===============================##
 ############################################################################################
-resource "aws_lb" "ecs-service" {
+resource "aws_lb" "ecs_service" {
   name               = "${local.project_name}-elb"
   internal           = false
   load_balancer_type = "application"
@@ -69,7 +69,7 @@ resource "aws_lb" "ecs-service" {
   }, local.tags)
 }
 
-resource "aws_lb_target_group" "ecs-service" {
+resource "aws_lb_target_group" "ecs_service" {
   name        = "${local.project_name}-target-group"
   port        = 8080
   protocol    = "HTTP"
@@ -92,12 +92,12 @@ resource "aws_lb_target_group" "ecs-service" {
 }
 
 resource "aws_lb_listener" "http" {
-  load_balancer_arn = aws_lb.ecs-service.arn
+  load_balancer_arn = aws_lb.ecs_service.arn
   port              = "80"
   protocol          = "HTTP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.ecs-service.arn
+    target_group_arn = aws_lb_target_group.ecs_service.arn
   }
 }
 
@@ -144,7 +144,7 @@ resource "aws_iam_role" "ecs" {
   }, local.tags)
 }
 
-resource "aws_iam_role_policy_attachment" "ecs-policy" {
+resource "aws_iam_role_policy_attachment" "ecs_policy" {
   policy_arn = aws_iam_policy.ecs.arn
   role       = aws_iam_role.ecs.name
 }
@@ -221,12 +221,12 @@ resource "aws_ecs_service" "ecs" {
   desired_count                      = 1
   network_configuration {
     subnets          = flatten(local.vpc_private_subnets_id)
-    security_groups  = [aws_security_group.ecs-service.id]
+    security_groups  = [aws_security_group.ecs_service.id]
     assign_public_ip = false
   }
   task_definition = aws_ecs_task_definition.ecs.arn
   load_balancer {
-    target_group_arn = aws_lb_target_group.ecs-service.arn
+    target_group_arn = aws_lb_target_group.ecs_service.arn
     container_name   = local.container_name
     container_port   = 8080
   }
@@ -293,7 +293,7 @@ resource "aws_cloudwatch_metric_alarm" "ecs_service_scale_out_alarm" {
   }
 
   alarm_description = "This metric monitor ecs CPU utilization up."
-  alarm_actions     = [aws_appautoscaling_policy.ecs-scale-out.arn]
+  alarm_actions     = [aws_appautoscaling_policy.ecs_scale_out.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "ecs_service_scale_in_alarm" {
@@ -312,7 +312,7 @@ resource "aws_cloudwatch_metric_alarm" "ecs_service_scale_in_alarm" {
   }
 
   alarm_description = "This metric monitor ecs CPU utilization down."
-  alarm_actions     = [aws_appautoscaling_policy.ecs-scale-in.arn]
+  alarm_actions     = [aws_appautoscaling_policy.ecs_scale_in.arn]
 }
 
 resource "aws_appautoscaling_target" "ecs" {
@@ -323,7 +323,7 @@ resource "aws_appautoscaling_target" "ecs" {
   service_namespace  = "ecs"
 }
 
-resource "aws_appautoscaling_policy" "ecs-scale-out" {
+resource "aws_appautoscaling_policy" "ecs_scale_out" {
   name               = "${local.ecs_service_name}-scale-out-policy"
   policy_type        = "StepScaling"
   resource_id        = aws_appautoscaling_target.ecs.resource_id
@@ -343,7 +343,7 @@ resource "aws_appautoscaling_policy" "ecs-scale-out" {
   }
 }
 
-resource "aws_appautoscaling_policy" "ecs-scale-in" {
+resource "aws_appautoscaling_policy" "ecs_scale_in" {
   name               = "${local.ecs_service_name}-scale-in-policy"
   policy_type        = "StepScaling"
   resource_id        = aws_appautoscaling_target.ecs.resource_id
