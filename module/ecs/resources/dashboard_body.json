@@ -1,0 +1,170 @@
+{
+  "widgets": [
+    {
+      "type": "metric",
+      "view": "timeSeries",
+      "x": 0,
+      "y": 0,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          [
+            "AWS/ApplicationELB",
+            "HTTPCode_Target_2XX_Count",
+            "LoadBalancer",
+            "${loadBalancer}",
+            {
+              "yAxis": "left"
+            }
+          ],
+          [
+            "AWS/ApplicationELB",
+            "HTTPCode_ELB_4XX_Count",
+            "LoadBalancer",
+            "${loadBalancer}",
+            {
+              "yAxis": "left"
+            }
+          ],
+          [
+            "AWS/ApplicationELB",
+            "HTTPCode_ELB_5XX_Count",
+            "LoadBalancer",
+            "${loadBalancer}",
+            {
+              "yAxis": "left"
+            }
+          ]
+        ],
+        "period": 60,
+        "stat": "Average",
+        "region": "${region}",
+        "title": "HTTP Request Count",
+        "setPeriodToTimeRange": true,
+        "yAxis": {
+          "left": {
+            "showUnits": true
+          },
+          "right": {
+            "showUnits": true
+          }
+        },
+        "stacked": true,
+        "liveData": true
+      }
+    },
+    {
+      "type": "metric",
+      "view": "timeSeries",
+      "x": 12,
+      "y": 0,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          [
+            "AWS/ApplicationELB",
+            "TargetResponseTime",
+            "LoadBalancer",
+            "${loadBalancer}",
+            {
+              "yAxis": "left"
+            }
+          ]
+        ],
+        "period": 60,
+        "stat": "Average",
+        "region": "${region}",
+        "title": "Response Time(Second)",
+        "setPeriodToTimeRange": true,
+        "yAxis": {
+          "left": {
+            "showUnits": true
+          },
+          "right": {
+            "showUnits": true
+          }
+        },
+        "stacked": true,
+        "liveData": true
+      }
+    },
+    {
+      "type": "metric",
+      "view": "timeSeries",
+      "x": 0,
+      "y": 12,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          [
+            "AWS/ECS",
+            "CPUUtilization",
+            "ServiceName",
+            "${ecsServiceName}",
+            "ClusterName",
+            "${ecsClusterName}",
+            {
+              "yAxis": "left"
+            }
+          ]
+        ],
+        "period": 60,
+        "stat": "Average",
+        "region": "${region}",
+        "title": "CPU Utilization",
+        "setPeriodToTimeRange": true,
+        "yAxis": {
+          "left": {
+            "showUnits": true
+          },
+          "right": {
+            "showUnits": true
+          }
+        },
+        "stacked": true,
+        "liveData": true
+      }
+    },
+    {
+      "type": "metric",
+      "view": "timeSeries",
+      "x": 12,
+      "y": 12,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          [
+            "AWS/ECS",
+            "MemoryUtilization",
+            "ServiceName",
+            "${ecsServiceName}",
+            "ClusterName",
+            "${ecsClusterName}",
+            {
+              "yAxis": "left"
+            }
+          ]
+        ],
+        "period": 60,
+        "stat": "Average",
+        "region": "${region}",
+        "title": "Memory Utilization",
+        "setPeriodToTimeRange": true,
+        "yAxis": {
+          "left": {
+            "showUnits": true
+          },
+          "right": {
+            "showUnits": true
+          }
+        },
+        "stacked": true,
+        "liveData": true
+      }
+    }
+  ]
+}
