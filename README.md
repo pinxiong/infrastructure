@@ -48,7 +48,7 @@ $ cd ../region/virginia
 and then, update the block of `s3` in `providers.tf` file
 ```terraform
 backend "s3" {
-    bucket  = "default-terraform-state-us-east-1"
+    bucket  = "**********-us-east-1"
     key     = "terraform/backend.tfstate"
     region  = "us-east-1"
     encrypt = "true"
