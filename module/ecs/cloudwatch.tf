@@ -19,4 +19,3 @@ resource "aws_cloudwatch_dashboard" "this" {
     aws_lb_target_group.ecs_service
   ]
 }
-

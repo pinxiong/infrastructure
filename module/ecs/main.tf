@@ -149,32 +149,32 @@ resource "aws_iam_role_policy_attachment" "ecs_policy" {
   role       = aws_iam_role.ecs.name
 }
 
-resource "aws_iam_role_policy_attachment" "AmazonECS_FullAccess" {
+resource "aws_iam_role_policy_attachment" "ecs_policy__AmazonECS_FullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonECS_FullAccess"
   role       = aws_iam_role.ecs.name
 }
 
-resource "aws_iam_role_policy_attachment" "ElasticLoadBalancingFullAccess" {
+resource "aws_iam_role_policy_attachment" "ecs_policy__ElasticLoadBalancingFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess"
   role       = aws_iam_role.ecs.name
 }
 
-resource "aws_iam_role_policy_attachment" "CloudWatchFullAccess" {
+resource "aws_iam_role_policy_attachment" "ecs_policy__CloudWatchFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccess"
   role       = aws_iam_role.ecs.name
 }
 
-resource "aws_iam_role_policy_attachment" "AmazonEC2FullAccess" {
+resource "aws_iam_role_policy_attachment" "ecs_policy__AmazonEC2FullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
   role       = aws_iam_role.ecs.name
 }
 
-resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerServiceforEC2Role" {
+resource "aws_iam_role_policy_attachment" "ecs_policy__AmazonEC2ContainerServiceforEC2Role" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
   role       = aws_iam_role.ecs.name
 }
 
-resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerServiceAutoscaleRole" {
+resource "aws_iam_role_policy_attachment" "ecs_policy__AmazonEC2ContainerServiceAutoscaleRole" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceAutoscaleRole"
   role       = aws_iam_role.ecs.name
 }
