@@ -20,7 +20,7 @@ resource "aws_s3_bucket_acl" "archive" {
   acl    = "private"
 }
 
-resource "aws_iam_policy" "s3-archive" {
+resource "aws_iam_policy" "s3_archive" {
   name   = "${local.bucket_name}-s3-policy"
   policy = jsonencode({
     "Version" : "2012-10-17",
@@ -53,7 +53,7 @@ resource "aws_ecr_repository" "ecr" {
   }, local.pipeline_tags)
 }
 
-resource "aws_ecr_repository_policy" "ecr-policy" {
+resource "aws_ecr_repository_policy" "ecr_policy" {
   repository = aws_ecr_repository.ecr.name
   policy     = jsonencode({
     "Version" : "2008-10-17",
@@ -110,7 +110,7 @@ resource "aws_iam_role" "pipeline" {
 }
 
 resource "aws_iam_role_policy_attachment" "build__s3-archive" {
-  policy_arn = aws_iam_policy.s3-archive.arn
+  policy_arn = aws_iam_policy.s3_archive.arn
   role       = aws_iam_role.pipeline.name
 }
 
