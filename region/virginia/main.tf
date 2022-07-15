@@ -12,31 +12,18 @@ module "Networking" {
   vpc_tags                   = local.tags
 }
 
-# Create ECS for demo
-module "ECS" {
-  source                 = "../../module/ecs"
-  vpc_id                 = module.Networking.vpc_id
-  account_id             = local.account_id
-  ecs_cluster_name       = "ecs-cluster"
-  ecs_service_name       = "golang-web-service"
-  cpu                    = 256
-  memory                 = 512
-  max_capacity           = 8
-  project_name           = "golang-web"
-  image_name             = "golang-web"
-  region                 = local.region
-  vpc_private_subnets_id = module.Networking.private_subnets_id
-  vpc_public_subnets_id  = module.Networking.public_subnets_id
+module "EKS" {
+  source             = "../../module/eks"
+  max_size           = 2
+  name               = "Marketing"
+  private_subnets_id = module.Networking.private_subnets_id
+  public_subnets_id  = module.Networking.public_subnets_id
+  vpc_id             = module.Networking.vpc_id
 }
 
-# Create pipeline
-module "Pipeline" {
-  source           = "../../module/pipeline"
-  name             = "golang-web"
-  image_name       = "golang-web"
-  account_id       = local.account_id
-  region           = local.region
-  pipeline_tags    = local.tags
-  ecs_cluster_name = module.ECS.ecs_cluster_name
-  ecs_service_name = module.ECS.ecs_service_name
+module "Jumper" {
+  source            = "../../module/jumpserver"
+  public_subnets_id = module.Networking.public_subnets_id
+  vpc_id            = module.Networking.vpc_id
+  instance_type     = "t3.nano"
 }
