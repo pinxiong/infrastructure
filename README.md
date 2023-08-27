@@ -5,7 +5,7 @@ The purpose of this project is to help you build your infrastructure in your [aw
 ## Prerequisites
 
 + Create an [aws account](https://aws.amazon.com/) with the IAM `AdministratorAccess` permission
-+ Install and configure [aws CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)
++ Install and configure [aws CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 + Install and configure [terraform](https://www.terraform.io/downloads)
 
 ## How to work
