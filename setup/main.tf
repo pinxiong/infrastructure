@@ -1,7 +1,7 @@
 # Define a s3 bucket to store terraform state file.
 resource "aws_s3_bucket" "terraform_state" {
   //NOTE: make sure the bucket name is global unique, otherwise the creation fails.
-  bucket        = format("pin-terraform-state-%s", local.region)
+  bucket        = format("xiongpin-terraform-state-%s", local.region)
   force_destroy = false
   lifecycle {
     ignore_changes = [bucket]
