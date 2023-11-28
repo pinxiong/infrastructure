@@ -12,7 +12,7 @@ module "Networking" {
   vpc_tags                   = local.tags
 }
 
-# Create ECS for demo
+/*# Create ECS for demo
 module "ECS" {
   source                 = "../../module/ecs"
   vpc_id                 = module.Networking.vpc_id
@@ -39,4 +39,4 @@ module "Pipeline" {
   pipeline_tags    = local.tags
   ecs_cluster_name = module.ECS.ecs_cluster_name
   ecs_service_name = module.ECS.ecs_service_name
-}
+}*/

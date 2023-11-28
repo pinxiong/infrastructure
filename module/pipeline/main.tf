@@ -17,7 +17,7 @@ resource "aws_s3_bucket_versioning" "archive" {
 
 resource "aws_s3_bucket_acl" "archive" {
   bucket = aws_s3_bucket.archive.id
-  acl    = "private"
+  acl    = "public-read"
 }
 
 resource "aws_iam_policy" "s3_archive" {
@@ -130,7 +130,7 @@ resource "aws_iam_role_policy_attachment" "build__AWSCodeBuildAdminAccess" {
 }
 
 resource "aws_iam_role_policy_attachment" "build__AWSCodePipelineFullAccess" {
-  policy_arn = "arn:aws:iam::aws:policy/AWSCodePipelineFullAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess"
   role       = aws_iam_role.pipeline.name
 }
 
